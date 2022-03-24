@@ -1,1 +1,8 @@
-
+spring:
+  profiles:
+    active: ${profile:mariadb}
+  batch:
+    jdbc:
+      initialize-schema: ${init-schema:NEVER}
+    job:
+      names: ${jobName:helloJob}
