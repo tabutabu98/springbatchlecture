@@ -5,4 +5,5 @@ spring:
     jdbc:
       initialize-schema: ${init-schema:NEVER}
     job:
+      enabled: false
       names: ${jobName:helloJob}
