@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class JobConfiguration {
+public class JobExecutionConfiguration {
 
-    public static final String JOB_NAME = "job";
+    public static final String JOB_NAME = "jobExecutionJob";
     public static final String BEAN_PREFIX = JOB_NAME + "_";
 
     private final JobBuilderFactory jobBuilderFactory;
@@ -38,9 +38,7 @@ public class JobConfiguration {
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                        log.info("=======================================================================");
-                        log.info("step1 was executed");
-                        log.info("=======================================================================");
+                        log.info("step1 has executed");
                         return RepeatStatus.FINISHED;
                     }
                 })
@@ -50,14 +48,10 @@ public class JobConfiguration {
     @Bean(BEAN_PREFIX + "Step2")
     public Step step2() {
         return stepBuilderFactory.get(BEAN_PREFIX + "Step2")
-                .tasklet(new Tasklet() {
-                    @Override
-                    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                        log.info("=======================================================================");
-                        log.info("step2 was executed");
-                        log.info("=======================================================================");
-                        return RepeatStatus.FINISHED;
-                    }
+                .tasklet((contribution, chunkContext) -> {
+                    log.info("step2 has executed");
+//                    throw new RuntimeException("step2 has failed");
+                    return RepeatStatus.FINISHED;
                 })
                 .build();
     }
