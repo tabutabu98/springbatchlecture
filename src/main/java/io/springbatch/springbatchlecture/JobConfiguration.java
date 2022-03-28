@@ -16,40 +16,46 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class DBJobConfiguration {
+public class JobConfiguration {
 
-    public static final String JOB_NAME = "dbJob";
+    public static final String JOB_NAME = "job";
     public static final String BEAN_PREFIX = JOB_NAME + "_";
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
-    @Bean
-    public Job dbJob() {
+    @Bean(JOB_NAME)
+    public Job job() {
         return jobBuilderFactory.get(JOB_NAME)
                 .start(step1())
                 .next(step2())
                 .build();
     }
 
-    private Step step1() {
+    @Bean(BEAN_PREFIX + "Step1")
+    public Step step1() {
         return stepBuilderFactory.get(BEAN_PREFIX + "Step1")
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                        log.info("Step1 was executed");
+                        log.info("=======================================================================");
+                        log.info("step1 was executed");
+                        log.info("=======================================================================");
                         return RepeatStatus.FINISHED;
                     }
                 })
                 .build();
     }
 
-    private Step step2() {
+    @Bean(BEAN_PREFIX + "Step2")
+    public Step step2() {
         return stepBuilderFactory.get(BEAN_PREFIX + "Step2")
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                        log.info("Step2 was executed");
+                        log.info("=======================================================================");
+                        log.info("step2 was executed");
+                        log.info("=======================================================================");
                         return RepeatStatus.FINISHED;
                     }
                 })
